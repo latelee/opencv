@@ -1,0 +1,36 @@
+.idea/
+*.suo
+*.sdf
+*.opensdf
+*.dll
+*.ilk
+*.pdb
+experi
+*.vsp
+*.psess
+*.DS_Store
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.tlb
+*.tlh
+*.bak
+[Dd]ebug*/
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+
+*.obj
+*.cache
+*.log
+*.o
+
