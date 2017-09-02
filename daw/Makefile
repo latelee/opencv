@@ -66,7 +66,7 @@ LIBS    +=
 
 LDFLAGS += $(LIBS)
 
-OPENCV=/home/latelee/bin/opencv_x64
+OPENCV=/opt/dp/opencv_3.3.0_x64/
 # !!!===
 INC1 = ./
 INC2 = ./inc
