@@ -207,7 +207,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         }
     }
     t = (double)getTickCount() - t;
-    printf( "detection time = %g ms\n", t*1000/getTickFrequency());
+    printf( "detection time = %g ms count: %d\n", t*1000/getTickFrequency(), faces.size());
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
@@ -239,6 +239,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
             //|CASCADE_DO_CANNY_PRUNING
             |CASCADE_SCALE_IMAGE,
             Size(30, 30) );
+        cout << "got nested objects: " << nestedObjects.size() << endl;
         for ( size_t j = 0; j < nestedObjects.size(); j++ )
         {
             Rect nr = nestedObjects[j];

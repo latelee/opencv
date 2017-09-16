@@ -93,14 +93,14 @@ std::string splitdir(const std::string &file)
     return file.substr(0, pos==std::string::npos ? file.length() : pos);
 }
 
-
-void detectAndDraw( Mat& img, CascadeClassifier& cascade, double scale)
+void detectAndDraw( Mat& img, CascadeClassifier& cascade, double scale, char* outfile)
 {
     double t = 0;
     vector<Rect> cars;
 
     Mat gray, smallImg;
-
+    Mat src_clone = img.clone();
+    
     cvtColor( img, gray, COLOR_BGR2GRAY );
     double fx = 1 / scale;
     resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
@@ -113,25 +113,27 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade, double scale)
         //|CASCADE_FIND_BIGGEST_OBJECT
         //|CASCADE_DO_ROUGH_SEARCH
         |CASCADE_SCALE_IMAGE,
-        Size(30, 9));
+        Size(200, 150));
 
     t = (double)getTickCount() - t;
     printf( "detection time = %g ms total: %d\n", t*1000/getTickFrequency(), cars.size());
     for ( size_t i = 0; i < cars.size(); i++ )
     {
-        Rect r = cars[i];
-        Mat smallImgROI;
-        vector<Rect> nestedObjects;
-        Point center;
-        int radius;
+        Rect rect = cars[i];
 
-        double aspect_ratio = (double)r.width/r.height;
-        printf("w: %d h: %d ratio: %.2f\n", r.width, r.height, aspect_ratio);
+        double aspect_ratio = (double)rect.width/rect.height;
+        //printf("w: %d h: %d ratio: %.2f\n", rect.width, rect.height, aspect_ratio);
         
-        rectangle(img, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)),
-                       cvPoint(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
+        rectangle(img, cvPoint(cvRound(rect.x*scale), cvRound(rect.y*scale)),
+                       cvPoint(cvRound((rect.x + rect.width-1)*scale), cvRound((rect.y + rect.height-1)*scale)),
                        Scalar(0, 0, 255), 2);
-        // TODO: 将框出来的部分保存成文件
+        #if 0
+        // 将框出来的部分保存成文件
+        Mat smallImgROI = src_clone(rect);
+        char filename[256] = {0};
+        sprintf(filename, "%s_car_%d.jpg", outfile, i);
+        imwrite(filename, smallImgROI);
+        #endif
     }
 }
 
@@ -165,9 +167,9 @@ int main(int argc, char* argv[])
         image = imread(infile[i].c_str());
     
         sprintf(outfile, "%s/%s_detect.jpg", outdir, splitonlyfile(infile[i]).c_str());
-        double scale = 1.0;
+        double scale = 3;
         
-        detectAndDraw(image, cascade, scale);
+        detectAndDraw(image, cascade, scale, outfile);
         
         printf("saving file: %s\n", outfile);
         imwrite(outfile, image);

@@ -79,6 +79,9 @@ void draw_rect2(Mat& imaged)
         line(imaged, points[j], points[(j+1)%4], Scalar(0, 0, 255), 2);
     }
     
+    // 截取并保存
+    Mat bound_mat = imaged(rect);
+    imwrite("__tmp.jpg", bound_mat);
 }
 
 int main(int argc, char* argv[])
@@ -109,6 +112,7 @@ int main(int argc, char* argv[])
 
     //draw_rect(imaged);
     draw_rect2(imaged);
+    
     
     imwrite("foo_draw.jpg", imaged);
 
